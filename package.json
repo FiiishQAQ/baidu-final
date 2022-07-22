@@ -4,8 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest --coverage",
-    "build": "babel src -d lib"
+    "test": "jest --coverage"
   },
   "author": "",
   "license": "ISC",
