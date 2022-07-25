@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <script src="./lib/SVM.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      padding: 0;
+      margin: 0;
+    }
+    .main {
+      min-height: 100vh;
+      width: 100vw;
+      padding: 8px;
+      margin: 0;
+      background: #f8f8f8;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .grid {
+      border-radius: 4px;
+      background: white;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      padding: 16px;
+    }
+    .grid+.grid {
+      margin-top: 8px;
+    }
+    .radio, .checkbox {
+      display: flex;
+    }
+    .gridHead {
+      margin-bottom: 16px;
+    }
+    .title {
+      font-weight: bold;
+      font-size: 24px;
+    }
+    .changeColorPrompt {
+      font-size: 14px;
+      opacity: 50%;
+    }
+    .red[red=true] {
+      color: #f54949;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      border-bottom: 2px solid;
+      border-top: 2px solid;
+      text-align: center;
+    }
+    .handleTable th, .handleTable td {
+      padding: 8px;
+    }
+    .rowName, .nameHead {
+      border-right: 1px solid;
+    }
+    .dataRowName {
+      padding-right: 8px;
+      width: 70%;
+      text-align: right;
+    }
+    .tableHead {
+      border-bottom: 2px solid;
+      border-top: 2px solid;
+    }
+    label {
+      display: flex;
+      align-items: center;
+    }
+    label .prompt {
+      margin-right: 8px;
+    }
+  </style>
+</head>
+<body>
+<div class="main" :test="123">
+  <div class="content">
+    <div class="data red grid" :red="isRed" @click="changeRedState">
+      <div class="gridHead">
+        <div class="title">数据</div>
+        <div class="changeColorPrompt">点击此 div 改变文字颜色</div>
+      </div>
+      <table>
+        <tr class="tableHead">
+          <th class="nameHead">变量名或表达式</th>
+          <th class="valueHead">值</th>
+        </tr>
+        <tr class="tableRow">
+          <td class="rowName dataRowName">a</td>
+          <td class="rowValue">{{a}}</td>
+        </tr>
+        <tr class="tableRow">
+          <td class="rowName dataRowName">b</td>
+          <td class="rowValue">{{b}}</td>
+        </tr>
+        <tr class="tableRow">
+          <td class="rowName dataRowName">Number(a) + Number(b)</td>
+          <td class="rowValue">{{Number(a) + Number(b)}}</td>
+        </tr>
+        <tr class="tableRow">
+          <td class="rowName dataRowName">isRed</td>
+          <td class="rowValue">{{isRed}}</td>
+        </tr>
+        <tr class="tableRow">
+          <td class="rowName dataRowName">radio</td>
+          <td class="rowValue">{{radio}}</td>
+        </tr>
+        <tr class="tableRow">
+          <td class="rowName dataRowName">checkbox</td>
+          <td class="rowValue">{{checkbox}}</td>
+        </tr>
+        <tr class="tableRow">
+          <td class="rowName dataRowName">obj.a.b.c.d.e</td>
+          <td class="rowValue">{{obj.a.b.c.d.e}}</td>
+        </tr>
+      </table>
+    </div>
+    <div class="grid text-2-bind">
+      <div class="gridHead">
+        <div class="title">测试组件</div>
+      </div>
+
+      <table class="handleTable">
+        <tr class="tableHead">
+          <th class="nameHead">变量名或表达式</th>
+          <th class="valueHead">值</th>
+        </tr>
+        <tr class="tableRow">
+          <td class="rowName">按钮点击测试</td>
+          <td class="rowValue">
+            <div class="buttons">
+              <button @click="addB">b++</button>
+              <button @click="addObjA">obj.a.b.c.d.e++</button>
+            </div>
+          </td>
+        </tr>
+        <tr class="tableRow">
+          <td class="rowName">文字输入双向绑定到 b</td>
+          <td class="rowValue" style="display: flex; flex-direction: column;">
+            <div>
+              <input mvvm-model="b" id="testInput" type="text" style="width: 160px; margin-bottom: 8px">
+            </div>
+            <div>
+              <textarea id="test" mvvm-model="b" style="width: 160px"></textarea>
+            </div>
+          </td>
+        </tr>
+        <tr class="tableRow">
+          <td class="rowName">单选双向绑定到 radio</td>
+          <td class="rowValue" style="display: flex; justify-content: center">
+            <div class="radio" style="margin-right: 8px">
+              <label><input name="testRadio" type="radio" value="a" @change="logEvent('hello!', $event)" mvvm-model="radio">a</label>
+              <label><input name="testRadio" type="radio" value="b" mvvm-model="radio">b</label>
+              <label><input name="testRadio" type="radio" value="c" mvvm-model="radio">c</label>
+              <label><input name="testRadio" type="radio" value="d" mvvm-model="radio">d</label>
+            </div>
+            <label>
+              <select class="select" mvvm-model="radio" @change="logEvent">
+                <option value="a">a</option>
+                <option value="b">b</option>
+                <option value="c">c</option>
+                <option value="d">d</option>
+              </select>
+            </label>
+          </td>
+        </tr>
+        <tr class="tableRow">
+          <td class="rowName">多选双向绑定到 checkbox</td>
+          <td class="rowValue" style="display: flex; justify-content: center">
+            <div class="checkbox" style="margin-right: 8px">
+              <label><input name="testRadio" type="checkbox" value="a" mvvm-model="checkbox">a</label>
+              <label><input name="testRadio" type="checkbox" value="b" mvvm-model="checkbox">b</label>
+              <label><input name="testRadio" type="checkbox" value="c" mvvm-model="checkbox">c</label>
+              <label><input name="testRadio" type="checkbox" value="d" mvvm-model="checkbox">d</label>
+            </div>
+
+            <label>
+              <select class="select" multiple mvvm-model="checkbox" @change="logEvent">
+                <option value="a">a</option>
+                <option value="b">b</option>
+                <option value="c">c</option>
+                <option value="d">d</option>
+              </select>
+            </label>
+          </td>
+        </tr>
+
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+  const APP = new SVM({
+    el: ".main",
+    data: {
+      a: 1233,
+      b: 723,
+      obj: {
+        a: {
+          b: {
+            c: {
+              d: {
+                e: 12,
+              }
+            }
+          }
+        }
+      },
+      isRed: true,
+      radio: "d",
+      checkbox: ["a", "d"],
+    },
+    methods: {
+      addA() {
+        this.a++;
+      },
+      inputB(e) {
+        console.log(e);
+        this.b = e.target.value;
+      },
+      addB(e) {
+        this.b++;
+      },
+      logEvent(greeting, e) {
+        console.log("1111", greeting, e)
+      },
+      changeRedState() {
+        this.isRed = !this.isRed;
+      },
+      addObjA() {
+        console.log("add obj.a.b.c.d.e")
+        this.obj.a.b.c.d.e++;
+      },
+    }
+  });
+</script>
+</body>
+</html>
