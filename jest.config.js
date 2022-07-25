@@ -12,6 +12,6 @@ module.exports = {
     '**/*.{js,jsx}',
     '!**/*config.{js,jsx}',
     '!**/coverage/**',
-    '!**/dist/**'
+    '!**/lib/**',
   ],
 };
