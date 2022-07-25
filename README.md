@@ -22,17 +22,18 @@
 
 ### 初始化框架
 在开始使用前需要通过以下方式初始化框架：
-```javascript
-import {SVM} from "../src/SVM";
-
-const APP = new SVM({
-  el: "selector",
-  data: {...},
-  methods: {...}
-})
+```html
+<script src="./lib/SVM.js"></script>
+<script>
+  const APP = new SVM({
+    el: "selector",
+    data: {...},
+    methods: {...}
+  })
+</script>
 ```
 其中 `el` 需要传入希望由框架接管的元素的选择器；
-在 `data` 中定义所需要监听更改的数据； 
+在 `data` 中定义所需要监听更改的数据；
 在 `methods` 中定义需要使用的函数，在 `methods` 中定义的函数可以通过 `this.[变量名]` 直接访问变量。
 
 ### 单项绑定的使用
@@ -44,9 +45,8 @@ const APP = new SVM({
   </p>
 </div>
 
+<script src="./lib/SVM.js"></script>
 <script>
-  import {SVM} from "../src/SVM";
-
   const APP = new SVM({
     el: "#app",
     data: {
@@ -71,9 +71,8 @@ const APP = new SVM({
   <button @click="addCounter($event, 5)">counter+5</button>
 </div>
 
+<script src="./lib/SVM.js"></script>
 <script>
-  import {SVM} from "../src/SVM";
-
   const APP = new SVM({
     el: "#app",
     data: {
